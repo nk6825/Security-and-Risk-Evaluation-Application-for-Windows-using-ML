@@ -1,0 +1,11 @@
+ask_password($ans)
+	What is your account login password?
+	---
+	$ans = string(1-40)
+
+no_of_administrators($ans)
+	How many administrators are in your system?
+	---
+	$ans = integer(1-10)
+	
+

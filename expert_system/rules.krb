@@ -1,0 +1,150 @@
+calculate_score
+    use calculate_score($score)
+    when
+        password($s1)
+        administrator($s6)
+        windows_update($s2)
+        firewall($s3)
+        malware($s4)
+        uac($s5)
+        $score = sum($s1, $s2, $s3, $s4, $s5, $s6)
+
+password_very_weak
+    use password(0)
+    when
+        questions.ask_password($pass)
+        check rate_password_strength($pass) == 0
+        python
+            print('Your password is very weak. Change it immediately!')
+
+password_weak
+    use password(5)
+    when
+        questions.ask_password($pass)
+        check rate_password_strength($pass) == 1
+        python
+            print('Your password is weak. Change your password!')
+
+password_moderate
+    use password(10)
+    when
+        questions.ask_password($pass)
+        check rate_password_strength($pass) == 2
+        python
+            print('Your password is alright. Change your password!')
+
+password_strong
+    use password(15)
+    when
+        questions.ask_password($pass)
+        check rate_password_strength($pass) == 3
+        python
+            print('Your password is strong')
+
+password_very_strong
+    use password(20)
+    when
+        questions.ask_password($pass)
+        check rate_password_strength($pass) == 4
+        python
+            print('Your password is very strong')
+
+single_administrator
+    use administrator(10)
+    when
+        questions.no_of_administrators($admins)
+        check $admins == 1
+        python
+            print('Good job! Single administrator is most secure.')
+
+multiple_administrator
+    use administrator(5)
+    when
+        questions.no_of_administrators($admins)
+        check $admins <= 3 and $admins > 1
+        python
+            print('You have multiple administrators.It is advisable to have a single administrator.')
+
+too_many_administrator
+    use administrator(0)
+    when
+        questions.no_of_administrators($admins)
+        check $admins > 3
+        python
+            print('You have too many administrators!')
+
+not_updated
+    use windows_update(0)
+    when
+        check windows_update_status() == False
+        python
+            print('______________________________________________________________________________')
+            print('Update your Windows for latest security patches.')
+
+updated
+    use windows_update(15)
+    when
+        check windows_update_status() == True
+        python
+            print('______________________________________________________________________________')
+            print('Good work! Your Windows is UpToDate')
+
+firewall_on
+    use firewall(20)
+    when
+        check firewall_status() == True
+        python
+            print('______________________________________________________________________________')
+            print('Good job! A firewall protects you from the net.')
+
+firewall_off
+    use firewall(0)
+    when
+        check firewall_status() == False
+        python
+            print('______________________________________________________________________________')
+            print('Enable your firewall to protect yourself from outside threats from the internet.')
+
+no_malware
+    use malware(30)
+    when
+        check malware_count() == 0
+        python
+            print('______________________________________________________________________________')
+            print('Excellent! Your system has no malware.')
+
+some_malware
+    use malware(10)
+    when
+        check malware_count() <= 5 and malware_count() > 0
+        python
+            print('______________________________________________________________________________')
+            print('Your system is infected with malware. Install an antivirus to clear them out.')
+
+lots_of_malware
+    use malware(0)
+    when
+        check malware_count() > 5
+        python
+            print('______________________________________________________________________________')
+            print('Your system is flooded with malware. Perform a system reset and download a reliable antivirus.')
+
+uac_on
+    use uac(5)
+    when
+        check uac_status() == True
+        python
+            print('______________________________________________________________________________')
+            print('Good work! Your UAC is on. It protects you from other users with malicious intent.')
+
+uac_off
+    use uac(0)
+    when
+        check uac_status() == False
+        python
+            print('______________________________________________________________________________')
+            print('Turn on your UAC from settings to safeguard your system from malicious users.')
+
+
+bc_extras
+    from functions import *

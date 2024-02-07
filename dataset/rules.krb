@@ -1,0 +1,158 @@
+calculate_score
+    use calculate_score($score, $l1, $l2, $l3, $l4, $l5, $l6, $v1, $v2, $v3, $v4, $v5, $v6)
+    when
+        password($s1,$l1,$v1)
+        administrator($s2,$l2, $v2)
+        windows_update($s3,$l3, $v3)
+        firewall($s4,$l4,$v4)
+        malware($s5,$l5, $v5)
+        uac($s6,$l6, $v6)
+        $score = sum($s1, $s2, $s3, $s4, $s5, $s6)
+
+password_very_weak
+    use password(0,0, $v1)
+    when
+        #questions.ask_password($pass)
+        #check rate_password_strength($pass) == 0
+        check $v1 == 0
+        python
+            print('Your password is very weak. Change it immediately!')
+
+password_weak
+    use password(5, 1,$v1)
+    when
+        #questions.ask_password($pass)
+        #check rate_password_strength($pass) == 1
+        check $v1 == 1
+        python
+            print('Your password is weak. Change your password!')
+
+password_moderate
+    use password(10, 2,$v1)
+    when
+        #questions.ask_password($pass)
+        #check rate_password_strength($pass) == 2
+        check $v1 == 2
+        python
+            print('Your password is alright. Change your password!')
+
+password_strong
+    use password(15, 3,$v1)
+    when
+        #questions.ask_password($pass)
+        #check rate_password_strength($pass) == 3
+        check $v1 == 3
+        python
+            print('Your password is strong')
+
+password_very_strong
+    use password(20,4, $v1)
+    when
+        #questions.ask_password($pass)
+        #check rate_password_strength($pass) == 4
+        check $v1 == 4
+        python
+            print('Your password is very strong')
+
+single_administrator
+    use administrator(10,0, $v2)
+    when
+        #questions.no_of_administrators($admins)
+        #check $admins == 1
+        check $v2 == 1
+        python
+            print('Good job! Single administrator is most secure.')
+
+multiple_administrator
+    use administrator(5,1, $v2)
+    when
+        #questions.no_of_administrators($admins)
+        #check $admins <= 3 and $admins > 1
+        check $v2 <= 3 and $v2 > 1
+        python
+            print('You have multiple administrators.It is advisable to have a single administrator.')
+
+too_many_administrator
+    use administrator(0,2, $v2)
+    when
+        #questions.no_of_administrators($admins)
+        #check $admins > 3
+        check $v2 > 3
+        python
+            print('You have too many administrators!')
+
+not_updated
+    use windows_update(0, 0,$v3)
+    when
+        check $v3 == False
+        python
+            print('______________________________________________________________________________')
+            print('Update your Windows for latest security patches.')
+
+updated
+    use windows_update(15,1, $v3)
+    when
+        check $v3 == True
+        python
+            print('______________________________________________________________________________')
+            print('Good work! Your Windows is UpToDate')
+
+firewall_on
+    use firewall(20,0, $v4)
+    when
+        check $v4 == True
+        python
+            print('______________________________________________________________________________')
+            print('Good job! A firewall protects you from the net.')
+
+firewall_off
+    use firewall(0,1,$v4)
+    when
+        check $v4 == False
+        python
+            print('______________________________________________________________________________')
+            print('Enable your firewall to protect yourself from outside threats from the internet.')
+
+no_malware
+    use malware(30,0, $v5)
+    when
+        check $v5 == 0
+        python
+            print('______________________________________________________________________________')
+            print('Excellent! Your system has no malware.')
+
+some_malware
+    use malware(10, 1,$v5)
+    when
+        check $v5 <= 5 and $v5 > 0
+        python
+            print('______________________________________________________________________________')
+            print('Your system is infected with malware. Install an antivirus to clear them out.')
+
+lots_of_malware
+    use malware(0, 2,$v5)
+    when
+        check $v5 > 5
+        python
+            print('______________________________________________________________________________')
+            print('Your system is flooded with malware. Perform a system reset and download a reliable antivirus.')
+
+uac_on
+    use uac(5,0, $v6)
+    when
+        check $v6 == True
+        python
+            print('______________________________________________________________________________')
+            print('Good work! Your UAC is on. It protects you from other users with malicious intent.')
+
+uac_off
+    use uac(0,1, $v6)
+    when
+        check $v6 == False
+        python
+            print('______________________________________________________________________________')
+            print('Turn on your UAC from settings to safeguard your system from malicious users.')
+
+
+bc_extras
+    from driver import *
